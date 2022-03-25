@@ -1,20 +1,3 @@
-<?php
-/**
- * Recommended way to include parent theme styles.
- * (Please see http://codex.wordpress.org/Child_Themes#How_to_Create_a_Child_Theme)
- *
- */  
-
-add_action( 'wp_enqueue_scripts', 'hello_elementor_child_style' );
-				function hello_elementor_child_style() {
-					wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
-					wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('parent-style') );
-				}
-
-/**
- * Your code goes below.
- */
-
 /* Custom Post type Movie */
 
 function custom_post_type() {
@@ -101,24 +84,15 @@ $wcatTerms = get_terms(
                     $loop = new WP_Query( $args );
                     while ( $loop->have_posts() ) : $loop->the_post();
                 ?>
+            <div>
               <a href="<?php the_permalink(); ?>">
                 <?php the_title(); ?>
+                <div class="post_img">
+                    <?php the_post_thumbnail('medium'); ?>
+                </div>
               </a>
+            </div>
             <?php endwhile; wp_reset_postdata(); ?> 
      <?php endforeach;  
 }
 add_shortcode('test','text');
-
-
-function wpdocs_theme_slug_widgets_init() {
-    register_sidebar( array(
-        'name'          => __( 'tetetet', 'textdomain' ),
-        'id'            => 'sidebar-1',
-        'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'textdomain' ),
-        'before_widget' => '<li id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</li>',
-        'before_title'  => '<h2 class="widgettitle">',
-        'after_title'   => '</h2>',
-    ) );
-}
-add_action( 'widgets_init', 'wpdocs_theme_slug_widgets_init' );
