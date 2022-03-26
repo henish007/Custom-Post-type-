@@ -138,3 +138,37 @@ function wpdocs_theme_slug_widgets_init() {
 add_action( 'widgets_init', 'wpdocs_theme_slug_widgets_init' );
 
 ?>
+
+<!-- design css -->
+
+
+.main_post_list {
+    display: flex;
+    column-gap: 20px;
+}
+.main_post_list .post_list {
+    width: 33.33%;
+    padding: 10px 15px;
+    border: 1px solid;
+    border-radius: 20px;
+    box-shadow: 0 0 11px #ccc;
+    overflow: hidden;
+    background-color: #dbdbdb;
+}
+.main_post_list .post_list img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+.main_post_list .post_list  p {
+    color: #000;
+    margin: 0;
+}
+.main_post_list .post_list .post_title p {
+    font-weight: 700;
+    font-size: 20px;
+}
+.main_post_list .post_list .category a {
+    color: #000;
+    text-transform: capitalize;
+}
