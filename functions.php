@@ -1,3 +1,20 @@
+<?php
+/**
+ * Recommended way to include parent theme styles.
+ * (Please see http://codex.wordpress.org/Child_Themes#How_to_Create_a_Child_Theme)
+ *
+ */  
+
+add_action( 'wp_enqueue_scripts', 'hello_elementor_child_style' );
+                function hello_elementor_child_style() {
+                    wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
+                    wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('parent-style') );
+                }
+
+/**
+ * Your code goes below.
+ */
+
 /* Custom Post type Movie */
 
 function custom_post_type() {
@@ -65,34 +82,59 @@ function text(){
 
 $wcatTerms = get_terms(
 'category', array('hide_empty' => 0, 'number' => 3, 'order' =>'asc', 'parent' =>0));
+?>
+<div class="main_post_list">
+<?php
         foreach($wcatTerms as $wcatTerm) : 
     ?>
-            <small><a href="<?php echo get_term_link( $wcatTerm->slug, $wcatTerm->taxonomy ); ?>"><?php echo $wcatTerm->name; ?></a></small>
-                <?php
-                    $args = array(
-                        'post_type' => 'movies',
-                        'order' => 'ASC',
-                        'tax_query' => array(
-                            array(
-                                'taxonomy' => 'category',
-                                'field' => 'slug',
-                                'terms' => $wcatTerm->slug,
-                            )
-                        ),
-                        'posts_per_page' => 1
-                    );
-                    $loop = new WP_Query( $args );
-                    while ( $loop->have_posts() ) : $loop->the_post();
-                ?>
-            <div>
-              <a href="<?php the_permalink(); ?>">
-                <?php the_title(); ?>
-                <div class="post_img">
-                    <?php the_post_thumbnail('medium'); ?>
-                </div>
-              </a>
+            <div class="post_list">
+                    <?php
+                        $args = array(
+                            'post_type' => 'movies',
+                            'order' => 'ASC',
+                            'tax_query' => array(
+                                array(
+                                    'taxonomy' => 'category',
+                                    'field' => 'slug',
+                                    'terms' => $wcatTerm->slug,
+                                )
+                            ),
+                            'posts_per_page' => 1
+                        );
+                        $loop = new WP_Query( $args );
+                        while ( $loop->have_posts() ) : $loop->the_post();
+                    ?>
+                <a href="<?php the_permalink(); ?>">
+                    <div class="post_img">
+                        <?php the_post_thumbnail('medium'); ?>
+                    </div>
+                    <div class="post_title"><p><?php the_title(); ?></p></div>
+                    <p class="jack"><?php the_field('test'); ?></p>
+
+                </a>
+                <div class="category"><span>category: </span><a href="<?php echo get_term_link( $wcatTerm->slug, $wcatTerm->taxonomy ); ?>"><?php echo $wcatTerm->name; ?></a></div>
             </div>
             <?php endwhile; wp_reset_postdata(); ?> 
-     <?php endforeach;  
+     <?php endforeach;  ?>
+
+
+ </div>
+ <?php
 }
 add_shortcode('test','text');
+
+
+function wpdocs_theme_slug_widgets_init() {
+    register_sidebar( array(
+        'name'          => __( 'tetetet', 'textdomain' ),
+        'id'            => 'sidebar-1',
+        'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'textdomain' ),
+        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</li>',
+        'before_title'  => '<h2 class="widgettitle">',
+        'after_title'   => '</h2>',
+    ) );
+}
+add_action( 'widgets_init', 'wpdocs_theme_slug_widgets_init' );
+
+?>
